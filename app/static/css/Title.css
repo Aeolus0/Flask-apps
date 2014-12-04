@@ -1,0 +1,15 @@
+h1 {
+	font-family: 'Arvo', serif;
+	font-size: 50px;
+}
+
+#slide-title {
+	background-color: #d3d3d3;
+	padding: 1cm;
+	display: inline-block;
+}
+
+#slide-title-image {
+	float: right;
+	margin-left: 1cm;
+}

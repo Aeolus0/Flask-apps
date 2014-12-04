@@ -1,0 +1,17 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="/static/css/Title.css">
+		<title>{{ content.title }}</title>
+	</head>
+	<body>
+		<div id="slide-title">
+            {{ content.slidetitle|safe }}
+            <img id="slide-title-image" src={{ content.imageurl|safe }}>   
+        </div>
+        <div id="slide-content">
+            {{ content.slidecontent|safe }}
+        </div>
+	</body>
+</html>
