@@ -8,14 +8,15 @@
 
 h1 {
 	font-family: 'Open Sans', sans-serif;
-	font-size: 10vh;
+	font-size: 7vmin;
 	color: #268bd2;
 }
 
 #slide-title {
 	background-color: #eee8d5;
 	display: inline-flex;
-	padding: 1vmin 10vmin 1vmin 10vmin;
+	padding: .1vmin 0vmin .1vmin 5vmin;
+
 }
 
 #slide-title-image {
@@ -26,11 +27,34 @@ h1 {
 #slide-content {
 	margin-left: 1cm;
 	width: auto;
-	height: 50vh;
+	height: 70vh;
+	font-size: 5vmin;
+	font-family: 'Helvetica', sans-serif;
 }
+#next-slide {
+	float: right;
+}
+hr {
+	height: 1vh;
+	border: 0px;
+	background: #eee8d5;
+	margin: 0px;
+}
+
 body {
 	background-color: #fdf6e3;
+	padding: 0px;
+	margin: 0px;
 }
-code {
-	background-color: #93a1a1;
+p {
+	color: #073642;
+	font-family: 'Helvetica', sans-serif;
+}
+h2 {
+	color: #859900;
+	font-family: 'Helvetica', sans-serif;
+}
+h3 {
+	color: #dc322f;
+	font-family: 'Helvetica', sans-serif;
 }

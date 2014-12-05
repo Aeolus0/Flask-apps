@@ -1,19 +1,17 @@
 from app import app
 from flask import render_template
 from app.func import md_to_html
-
+import os
 
 def wrap_tags(content, tag):
 	return "<" + str(tag) + ">" + str(content) + "</" + str(tag) + ">"
-
-
+root_dir = str(os.getcwd())
 
 @app.route('/')
 @app.route('/index')
 def root():
-	from os import listdir
 	content = []
-	for elem in listdir("presentations"):
+	for elem in os.listdir("presentations"):
 		temp = "<a href=\"" + "/" + str(elem) +"\">" + str(elem) + "</a>"   
 		content.append(wrap_tags(temp, "h5"))
 	content = "\n".join(content)
@@ -22,9 +20,8 @@ def root():
 @app.route('/<presentation_name>')
 @app.route('/<presentation_name>/<int:slide_number>')
 def present(presentation_name, slide_number=1):
-	from os import listdir
-	content = md_to_html.md_to_html("C:\Users\Dhash\Documents\GitHub\Flask-apps\\" + "presentations\\" + str(presentation_name) + "\\" + str(slide_number) + ".md")
-	for elem in listdir("presentations/" + str(presentation_name)):
+	content = md_to_html.md_to_html(root_dir + "/presentations/" + str(presentation_name) + "/" + str(slide_number) + ".md")
+	for elem in os.listdir("presentations/" + str(presentation_name)):
 		temp = elem[:-3]
 		temp = int(temp)
 		prev_temp = 0

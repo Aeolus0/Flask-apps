@@ -9,6 +9,9 @@
             {{ content.slidetitle|safe }}
             <img id="slide-title-image" src={{ content.imageurl|safe }}>   
         </div>
+
+        <hr>
+
         <div id="slide-content">
             {{ content.slidecontent|safe }}
         </div>
@@ -17,9 +20,10 @@
 
         <div id="footer">
         <! do the progress bar >
+        <! as well as the mini image >
 
-            <div id="next_slide">
-                <a href={{ content.next_page_link|safe }}><img src="/static/images/rightarrow.png" border="0" alt="Next Slide"></a>
+            <div id="next-slide">
+                <a href={{ content.next_page_link|safe }}><img src="/static/icons/arrow_right_colored.png" border="0" alt="Next Slide" style="opacity: .5;"></a>
             </div>
         </div>
 	</body>
