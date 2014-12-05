@@ -1,9 +1,8 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="/static/css/Title.css">
-		<title>{{ content.title }}</title>
+		<title>{{ content.title|safe }}</title>
 	</head>
 	<body>
 		<div id="slide-title">
@@ -12,6 +11,16 @@
         </div>
         <div id="slide-content">
             {{ content.slidecontent|safe }}
+        </div>
+
+        <hr>
+
+        <div id="footer">
+        <! do the progress bar >
+
+            <div id="next_slide">
+                <a href={{ content.next_page_link|safe }}><img src="/static/images/rightarrow.png" border="0" alt="Next Slide"></a>
+            </div>
         </div>
 	</body>
 </html>

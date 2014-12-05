@@ -20,10 +20,21 @@ def root():
 	return render_template('index.html', content=content)
 
 @app.route('/<presentation_name>')
-@app.route('/<presentation_name>/<slide_number>')
+@app.route('/<presentation_name>/<int:slide_number>')
 def present(presentation_name, slide_number=1):
-	slide = slide_number
+	from os import listdir
 	content = md_to_html.md_to_html("C:\Users\Dhash\Documents\GitHub\Flask-apps\\" + "presentations\\" + str(presentation_name) + "\\" + str(slide_number) + ".md")
+	for elem in listdir("presentations/" + str(presentation_name)):
+		temp = elem[:-3]
+		temp = int(temp)
+		prev_temp = 0
+		if temp > prev_temp:
+			content["number_of_slides"] = temp
+		prev_temp = temp
+	content["presentation_name"] = presentation_name
+	content["slide_number"] = slide_number
+	content["slidetitle"] = wrap_tags(content["slidetitle"], "h1")
+	content["next_page_link"] = "/presentations/" + str(presentation_name) +"/" + str(slide_number + 1)
 	if content["firstline"] == "title":
 		return render_template('Title.html', content=content)
 	elif content["firstline"] == "heading":
