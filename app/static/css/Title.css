@@ -27,12 +27,15 @@ h1 {
 #slide-content {
 	margin-left: 1cm;
 	width: auto;
-	height: 70vh;
+	height: auto;
 	font-size: 5vmin;
 	font-family: 'Helvetica', sans-serif;
 }
 #next-slide {
 	float: right;
+}
+.codehilite{
+	background: #eee8d5;
 }
 hr {
 	height: 1vh;
