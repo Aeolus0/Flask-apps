@@ -7,5 +7,5 @@ def md_to_html(filepath):
 	title = unparsed_text[1]
 	slidetitle = unparsed_text[2]
 	unparsed_text = "\n".join(unparsed_text[3:])
-	html = markdown.markdown(unparsed_text)
+	html = markdown.markdown(unparsed_text, extensions=["codehilite"])
 	return {"firstline" : firstline, "title" : title, "slidetitle" : slidetitle, "slidecontent" : html}
