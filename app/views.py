@@ -1,6 +1,7 @@
 from app import app
-from flask import render_template
+from flask import render_template, redirect
 from app.func import md_to_html
+from .forms import *
 import os
 
 def wrap_tags(content, tag):
@@ -38,3 +39,9 @@ def present(presentation_name, slide_number=1):
 		return render_template('Heading.html', content=content)
 	elif content["firstline"] == "slide" or "":
 		return render_template('Slide.html', content=content)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	content = {}
+	form = LoginForm()
+	return render_template('login.html', form=form, content=content)
