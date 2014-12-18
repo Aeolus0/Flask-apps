@@ -20,5 +20,8 @@
   	  - screen
   	  - iftop
   	  - iotop
-      - build-essential
+  	  - build-essential
   	  - vim #end boilerplate stuff
+  	shell: echo "set -g prefix C-a\nunbind C-b\nbind C-a send-prefix" >> ~/.tmux.conf
+
+  	  
