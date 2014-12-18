@@ -2,6 +2,11 @@
 - hosts: app_servers
   remote_user: root
   tasks:
+     # Boilerplate stuff
+    apt: upgrade_cache=yes
+    apt: upgrade=yes
+    apt: upgrade=dist
+     # End boilerplate stuff
   	apt: name={{ items }} state=present
   	with_items:
   	  - postgresql #database server
@@ -15,6 +20,5 @@
   	  - screen
   	  - iftop
   	  - iotop
+      - build-essential
   	  - vim #end boilerplate stuff
-
-

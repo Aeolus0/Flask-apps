@@ -44,4 +44,7 @@ def present(presentation_name, slide_number=1):
 def login():
 	content = {}
 	form = LoginForm()
+	if form.validate_on_submit():
+		content
+		return render_template('user_page.html',)
 	return render_template('login.html', form=form, content=content)
