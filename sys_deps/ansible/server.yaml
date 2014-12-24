@@ -1,0 +1,29 @@
+---
+- hosts: app_servers
+  remote_user: root
+  tasks:
+     # Boilerplate stuff
+    apt: upgrade_cache=yes
+    apt: upgrade=yes
+    apt: upgrade=dist
+     # End boilerplate stuff
+  	apt: name={{ items }} state=present
+  	with_items:
+  	  - postgresql #database server
+  	  - postgresql-devel #hooks for psycopg2
+  	  - docker.io #docker for eventual expansion
+      - libffi-dev #req for cffi which is a req for bcrypt
+      - python-dev #req for bcrypt compilation as <#include Python.h> is in there
+      - python-virtualenv #obvious virtualenv stuff
+  	  - htop #boilerplate stuff
+  	  - tmux
+  	  - slurm
+  	  - mtr
+  	  - rsync
+  	  - screen
+  	  - iftop
+  	  - iotop
+      - build-essential
+  	  - vim #end boilerplate stuff
+    shell: git clone https://github.com/Aeolus0/Flask-apps.git Flask-apps 
+    shell: virtualenv Flask-apps/Flask-apps-venv/
