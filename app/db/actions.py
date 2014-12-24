@@ -46,6 +46,7 @@ def sign_up_user_details(name):
 		# 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
 		# Generated with echo "User_info_db_user" | openssl sha1
 		cur.execute("INSERT INTO User_info(name) values ({})".format(name))
+		return True
 	except:
 		return False
 
