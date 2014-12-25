@@ -12,9 +12,9 @@
   	  - postgresql #database server
   	  - postgresql-devel #hooks for psycopg2
   	  - docker.io #docker for eventual expansion
-      - libffi-dev #req for cffi which is a req for bcrypt
-      - python-dev #req for bcrypt compilation as <#include Python.h> is in there
-      - python-virtualenv #obvious virtualenv stuff
+          - libffi-dev #req for cffi which is a req for bcrypt
+    	  - python-dev #req for bcrypt compilation as <#include Python.h> is in there
+	  - python-virtualenv #obvious virtualenv stuff
   	  - htop #boilerplate stuff
   	  - tmux
   	  - slurm
@@ -23,7 +23,9 @@
   	  - screen
   	  - iftop
   	  - iotop
-      - build-essential
+	  - git-core
+          - build-essential
   	  - vim #end boilerplate stuff
+    shell: echo "unbind C-b\nset -g prefix C-a\nbind C-a send-prefix" >> ~/.tmux.conf #make tmux hotkey sane
     shell: git clone https://github.com/Aeolus0/Flask-apps.git Flask-apps 
     shell: virtualenv Flask-apps/Flask-apps-venv/
