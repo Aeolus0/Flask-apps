@@ -33,18 +33,24 @@ def present(presentation_name, slide_number=1):
 	content["slide_number"] = slide_number
 	content["slidetitle"] = wrap_tags(content["slidetitle"], "h1")
 	content["next_page_link"] = "/presentations/" + str(presentation_name) +"/" + str(slide_number + 1)
-	if content["firstline"] == "title":
+	if content["firstline"] == "title\r":
 		return render_template('Title.html', content=content)
-	elif content["firstline"] == "heading":
+	elif content["firstline"] == "heading\r":
 		return render_template('Heading.html', content=content)
-	elif content["firstline"] == "slide" or "":
+	elif content["firstline"] == "slide\r" or "":
 		return render_template('Slide.html', content=content)
+	else:
+		return render_template("Something_went_wrong.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+	import bcrypt
 	content = {}
 	form = LoginForm()
 	if form.validate_on_submit():
-		content
+		returned_content["username"] = form.userlogin.data
+		returned_content["password"] = form.password.data
+		returned_content["email"] = form.email.data
+		sign_up_user(returned_content)
 		return render_template('user_page.html',)
 	return render_template('login.html', form=form, content=content)
