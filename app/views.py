@@ -12,7 +12,7 @@ root_dir = str(os.getcwd())
 @app.route('/index')
 def root():
 	content = []
-	for elem in os.listdir("presentations"):
+	for elem in os.listdir(root_dir + "/presentations"):
 		temp = "<a href=\"" + "/" + str(elem) +"\">" + str(elem) + "</a>"   
 		content.append(wrap_tags(temp, "h5"))
 	content = "\n".join(content)
