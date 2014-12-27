@@ -1,3 +1,5 @@
+
+
 def database_conn(dbname, user, host, password):
 	import psycopg2
 	try:
@@ -7,16 +9,16 @@ def database_conn(dbname, user, host, password):
 	except:
 		return False
 
-def auth_user(username, password):
+def auth_user(user_info):
 	import bcrypt
 	try:
 		cur = database_conn("Auth", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
 		# 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
 		# Generated with echo "Auth_db_user" | openssl sha1
-		cur.execute("SELECT * FROM AUTH WHERE username = {}".format(username))
+		cur.execute("SELECT * FROM AUTH WHERE username = {}".format(user_info["username"]))
 		username_non_auth = cur.fetchall()
 		# i don't think i need this since only one record will be returned password_hash_loc = 0
-		if username_non_auth["password_salted"] == bcrypt.hash(password, username_non_auth["password_salted"]):
+		if username_non_auth["password_salted"] == bcrypt.hash(user_info["password"], username_non_auth["password_salted"]):
 			return True
 		else:
 			return False
@@ -51,5 +53,5 @@ def sign_up_user_details(name):
 		return False
 
 
-def shared_presentation(pres_uid, account_or_email):
+#def shared_presentation(pres_uid, account_or_email):
 
