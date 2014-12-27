@@ -47,6 +47,7 @@ def present(presentation_name, slide_number=1):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+	import bcrypt
 	content = {}
 	form = LoginForm()
 	user_info = {}
