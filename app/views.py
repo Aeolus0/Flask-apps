@@ -6,13 +6,13 @@ import os
 
 def wrap_tags(content, tag):
 	return "<" + str(tag) + ">" + str(content) + "</" + str(tag) + ">"
-root_dir = str(os.getcwd())
+root_dir = str(__file__[:-13])
 
 @app.route('/')
 @app.route('/index')
 def root():
 	content = []
-	for elem in os.listdir("presentations"):
+	for elem in os.listdir(root_dir + "presentations"):
 		temp = "<a href=\"" + "/" + str(elem) +"\">" + str(elem) + "</a>"   
 		content.append(wrap_tags(temp, "h5"))
 	content = "\n".join(content)
