@@ -21,8 +21,8 @@ def root():
 @app.route('/<presentation_name>')
 @app.route('/<presentation_name>/<int:slide_number>')
 def present(presentation_name, slide_number=1):
-	content = md_to_html.md_to_html(root_dir + "/presentations/" + str(presentation_name) + "/" + str(slide_number) + ".md")
-	for elem in os.listdir("presentations/" + str(presentation_name)):
+	content = md_to_html.md_to_html(root_dir + "presentations/" + str(presentation_name) + "/" + str(slide_number) + ".md")
+	for elem in os.listdir(root_dir + "presentations/" + str(presentation_name)):
 		temp = elem[:-3]
 		temp = int(temp)
 		prev_temp = 0
