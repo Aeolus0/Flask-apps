@@ -18,8 +18,8 @@ def root():
 	content = "\n".join(content)
 	return render_template('index.html', content=content)
 
-@app.route('/<presentation_name>')
-@app.route('/<presentation_name>/<int:slide_number>')
+@app.route('/presentations/<presentation_name>')
+@app.route('/presentations/<presentation_name>/<int:slide_number>')
 def present(presentation_name, slide_number=1):
 	content = md_to_html.md_to_html(root_dir + "presentations/" + str(presentation_name) + "/" + str(slide_number) + ".md")
 	for elem in os.listdir(root_dir + "presentations/" + str(presentation_name)):
@@ -33,11 +33,11 @@ def present(presentation_name, slide_number=1):
 	content["slide_number"] = slide_number
 	content["slidetitle"] = wrap_tags(content["slidetitle"], "h1")
 	content["next_page_link"] = "/presentations/" + str(presentation_name) +"/" + str(slide_number + 1)
-	if content["firstline"] == "title\r":
+	if content["firstline"] == "title\r" or "title":
 		return render_template('Title.html', content=content)
-	elif content["firstline"] == "heading\r":
+	elif content["firstline"] == "heading\r" or "heading":
 		return render_template('Heading.html', content=content)
-	elif content["firstline"] == "slide\r" or "":
+	elif content["firstline"] == "slide\r" or "" or "slide":
 		return render_template('Slide.html', content=content)
 	else:
 		return render_template("Something_went_wrong.html")
