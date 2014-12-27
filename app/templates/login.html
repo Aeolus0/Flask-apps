@@ -11,12 +11,10 @@
                         {{ content.loginfailure }}
                 </p>
         	<form action="" method="post" name="login">
+                        {{ form.hidden_tag() }}
         		<p>
-        			{{ form.userlogin(size=80) }}
+        			{{ form.userid(size=80) }}
         		</p>
-			<p>
-				{{ form.email(size=80) }}
-			</p>
         		<p>
         			{{ form.password(size=80) }}
         		</p>
