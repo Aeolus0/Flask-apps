@@ -3,6 +3,6 @@ from wtforms import StringField, BooleanField, PasswordField
 from wtforms.validators import DataRequired
 
 class LoginForm(Form):
-	userlogin = StringField(u'userid', validators=[DataRequired()])
+	userid = StringField(u'userid', validators=[DataRequired()])
 	password = PasswordField(u'password', validators=[DataRequired()])
 	rememberme = BooleanField('rememberme', default=False)
