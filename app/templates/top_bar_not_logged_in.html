@@ -1,0 +1,22 @@
+{% extends base.html %}
+{% block top_bar %}
+	<div id="top_bar">
+		<div id="top_bar_left">
+			<img src="static/images/logo.png">
+			<form action="" method="post" name="search">
+				<p>
+					{{ form.search }}
+				</p>
+			</form>
+			{% for elem in content.top_bar_links %}
+				<a href="links/"{{ elem }}>{{ elem }}</a>
+			{% endfor %}
+		</div>
+		<div id="top_bar_right">
+					{% for elem in content.top_bar_sign_x %}
+			<a href="/"{{ elem }}>{{ elem }}</a>
+		{% endfor %}
+		</div>
+	</div>
+	<hr>
+{% endblock %}
