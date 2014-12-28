@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, session
 from app.func import md_to_html
 from .forms import *
 from db import *
@@ -56,9 +56,15 @@ def login():
 			user_info["username"] = form.userid.data
 			user_info["password"] = form.password.data
 			if actions.auth_user(user_info):
+				session["logged_in"] = True
 				return redirect('/' + user_info["username"])
 			else:
 				content["loginfailure"] = "Invalid username or password"
 		else:
 			content["loginfailure"] = "Invalid data in field"
 	return render_template('login.html', form=form, content=content)
+
+@app.route('/logout')
+def logout():
+	if 'logged_in' in session:
+		del	session['logged_in']
