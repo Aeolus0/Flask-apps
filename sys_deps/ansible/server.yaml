@@ -10,7 +10,7 @@
   	apt: name={{ items }} state=present
   	with_items:
   	  - postgresql #database server
-  	  - postgresql-devel #hooks for psycopg2
+  	  - postgresql-server-dev-9.3 #hooks for psycopg2
   	  - docker.io #docker for eventual expansion
           - libffi-dev #req for cffi which is a req for bcrypt
     	  - python-dev #req for bcrypt compilation as <#include Python.h> is in there
