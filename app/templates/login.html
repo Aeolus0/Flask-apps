@@ -7,9 +7,11 @@
 	<body>
 		<div id="login-box">
         	<h1>Log in!</h1>
-                <p>
-                        {{ content.loginfailure }}
-                </p>
+                {% if content.error %}
+                        <p>
+                                {{ content.error }}
+                        </p>
+                {% endif %}
         	<form action="" method="post" name="login">
                         {{ form.hidden_tag() }}
         		<p>
