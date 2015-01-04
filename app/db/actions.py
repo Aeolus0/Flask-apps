@@ -47,6 +47,10 @@ def sign_up_user(user_info):
 		# 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
 		# Generated with echo "Auth_db_user" | openssl sha1
 		password_salted = bcrypt.hash(user_info["password"])
+		if ((cur.execute("SELECT * FROM Auth(username) WHERE username = {}".format(user_info["username"]) != ""))):
+			return (False, "Username already taken")
+		if ((cur.execute("SELECT * FROM Auth(email) WHERE email {}".format(user_info["email"]) != ""))):
+			return (False, "Email already taken")
 		cur.execute("INSERT INTO Auth(username) values ({})".format(user_info["username"]))
 		cur.execute("INSERT INTO Auth(password_salted) values ({})".format(password_salted))
 		cur = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
@@ -55,9 +59,9 @@ def sign_up_user(user_info):
 		cur.execute("INSERT INTO User_info(email) values ({})".format(user_info["email"]))
 		cur.execute("INSERT INTO User_info(join_date) values ({})".format(time.strftime("%Y/%m/%d")))
 		del cur
-		return True
+		return (True)
 	except:
-		return False
+		return (False)
 
 def sign_up_user_details_optinal(user_info):
 	try:

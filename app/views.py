@@ -37,9 +37,9 @@ def login():
 				current_user.update(get_user_details(user_info["username"]))
 				return redirect('/' + user_info["username"])
 			else:
-				content["loginfailure"] = "Invalid username or password"
+				content["error"] = "Invalid username or password"
 		else:
-			content["loginfailure"] = "Invalid data in field"
+			content["error"] = "Invalid data in field"
 	return render_template('login.html', form=form, content=content)
 
 @app.route('/logout')
@@ -48,11 +48,19 @@ def logout():
 		del	session['logged_in']
 	return redirect('/')
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
-	pass
-	# TODO implement signup
-
+	if request.method = 'POST':
+		form = LoginForm()
+		if form.validate_on_submit():
+			user_info["username"] = form.userid.data
+			user_info["password"] = form.password.data
+			user_info["email"] = form.email.data
+			if type(sign_up_user(user_info)) = "<type 'tuple'>":
+				content["error"] = sign_up_user(user_info)[1]
+			else:
+				return redirect('/' + user_info["username"])
+	return render_template('signup.html')
 
 
 
@@ -78,8 +86,8 @@ def root():
 
 
 
-@app.route('/presentations/<username>/<presentation_name>')
-@app.route('/presentations/<username>/<presentation_name>/<int:slide_number>')
+@app.route('/<username>/p/<presentation_name>')
+@app.route('/<username>/p/<presentation_name>/<int:slide_number>')
 def present(presentation_name, slide_number=1):
 	content = md_to_html.md_to_html(root_dir + "/presentations/" + str(presentation_name) + "/" + str(slide_number) + ".md")
 	for elem in os.listdir("presentations/" + str(presentation_name)):
