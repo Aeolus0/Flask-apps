@@ -17,6 +17,9 @@ def wrap_tags(content, tag):
 	return "<" + str(tag) + ">" + str(content) + "</" + str(tag) + ">"
 root_dir = str(__file__[:-13])
 
+create_database(root_dir)
+
+
 @login_manager.user_loader
 def load_user(userid):
     return User.get(userid)
@@ -56,8 +59,9 @@ def signup():
 			user_info["username"] = form.userid.data
 			user_info["password"] = form.password.data
 			user_info["email"] = form.email.data
-			if type(sign_up_user(user_info)) == "<type 'tuple'>":
-				content["error"] = sign_up_user(user_info)[1]
+			data = sign_up_user(user_info)
+			if type(data) == "<type 'tuple'>":
+				content["error"] = data[1]
 			else:
 				return redirect('/' + user_info["username"])
 	return render_template('signup.html')
@@ -110,13 +114,15 @@ def present(presentation_name, slide_number=1):
 	else:
 		return render_template("Something_went_wrong.html")
 
+@app.route('/<username>')
+def user_page(username):
+	user_info = get_user_details(username)
+	if current_user.is_authenticated():
+		if username == current_user["username"]:
+			content["ownpage"] = True
+			content
+		else:
+			content["ownpage"] = False
 
-
-
-
-
-
-
-
-
+	return render_template('user_page.html', content=content)
 

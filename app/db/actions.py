@@ -14,6 +14,11 @@ def database_conn(dbname, user, host, password):
 	except:
 		return (False, "Something went wrong in the database bits")
 
+def create_database(root_dir):
+	auth_db = root_dir + "app/db/Auth.db"
+	user_info_db = root_dir + "app/db/User_info.db"
+
+
 ##########################
 ###### Sign in Stuff #####
 ##########################
@@ -21,7 +26,7 @@ def database_conn(dbname, user, host, password):
 
 def auth_user(user_info):
 	try:
-		cur = database_conn("Auth", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
+		cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
 		# 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
 		# Generated with echo "Auth_db_user" | openssl sha1
 		cur.execute("SELECT * FROM AUTH WHERE username = {}".format(user_info["username"]))
@@ -41,7 +46,7 @@ def auth_user(user_info):
 
 def sign_up_user(user_info):
 	try:
-		cur = database_conn("Auth", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
+		cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
 		# 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
 		# Generated with echo "Auth_db_user" | openssl sha1
 		password_salted = bcrypt.hash(user_info["password"])
@@ -62,7 +67,7 @@ def sign_up_user(user_info):
 
 def sign_up_user_details_optinal(user_info):
 	try:
-		cur = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+		cur = database_conn("User_info.db", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
 		# 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
 		# Generated with echo "User_info_db_user" | openssl sha1
 		for elem in user_info:
@@ -77,17 +82,19 @@ def sign_up_user_details_optinal(user_info):
 
 def get_user_details(user_info):
 	try: 
-		cur = database_conn("Auth", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
+		cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
 		# 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
 		# Generated with echo "Auth_db_user" | openssl sha1
 		cur.execute("SELECT * from Auth WHERE username=\"{}\"".format(User_info["username"]))
 		indata = cur.fetchall()
 		userid = indata[0]
-		cur = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+		cur = database_conn("User_info.db", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
 		# 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
 		# Generated with echo "User_info_db_user" | openssl sha1
+		cur.execute(" SELECT * FROM information_schema.colums WHERE table_schema")
+		indata1 = cur.fetchall
 		cur.execute("SELECT * FROM User_info WHERE userid=\"{}\"".format(userid))
-		indata = cur.fetchall()
+		indata2 = cur.fetchall()	
 		return indata[1:] # no need to return the uniq user id as well 
 	except:
 		return (False, "Unable to establish database connection")
