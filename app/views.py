@@ -9,8 +9,8 @@ import bcrypt
 
 app.config.from_object('config')
 
-login_manger = LoginManager()
-login_manger.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 def wrap_tags(content, tag):
@@ -50,13 +50,13 @@ def logout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-	if request.method = 'POST':
+	if request.method == 'POST':
 		form = LoginForm()
 		if form.validate_on_submit():
 			user_info["username"] = form.userid.data
 			user_info["password"] = form.password.data
 			user_info["email"] = form.email.data
-			if type(sign_up_user(user_info)) = "<type 'tuple'>":
+			if type(sign_up_user(user_info)) == "<type 'tuple'>":
 				content["error"] = sign_up_user(user_info)[1]
 			else:
 				return redirect('/' + user_info["username"])
