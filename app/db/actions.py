@@ -20,11 +20,12 @@ def auth_schema():
 def user_info_schema():
 	user_info_schema_var = """CREATE TABLE User_info
 	(id INT SERIAL PRIMARY KEY NOT NULL,
-	name                  TEXT NOT NULL,
-	location              TEXT NOT NULL,
-	github                TEXT NOT NULL,
-	linkedin              TEXT NOT NULL,
-
+	name                  TEXT,
+	location              TEXT,
+	github                TEXT,
+	linkedin              TEXT,
+	website               TEXT,
+	email                 TEXT
 	)"""
     return user_info_schema_var
 
@@ -44,12 +45,13 @@ def create_database(root_dir):
 		cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
 		# 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
 		# Generated with echo "Auth_db_user" | openssl sha1
-		cur.execute(auth_schema)
+		cur.execute("""{}""".format(auth_schema()))
 	if not os.path.isfile(user_info_db):
 		open(user_info_db, 'a').close()
 		cur = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
 		# 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
 		# Generated with echo "User_info_db_user" | openssl sha1
+		cur.execute("""{}""".format(user_info_schema()))
 
 
 
@@ -125,16 +127,10 @@ def get_user_details(user_info):
 		cur = database_conn("User_info.db", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
 		# 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
 		# Generated with echo "User_info_db_user" | openssl sha1
-		cur.execute(" SELECT * FROM information_schema.colums WHERE table_schema")
-		indata1 = cur.fetchall
 		cur.execute("SELECT * FROM User_info WHERE userid=\"{}\"".format(userid))
-		indata2 = cur.fetchall()
-		del data_dict["id"]
-		for if_null in indata2:
-			if if_null == "null"
-
-		data_dict = dict(zip(indata1, indata2))
-		return data_dict # we'll filter out the first key 
+		indata = cur.fetchall()
+		del indata["id"]
+		return indata
 	except:
 		return (False, "Unable to establish database connection")
 
