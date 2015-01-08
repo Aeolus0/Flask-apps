@@ -40,15 +40,15 @@ def database_conn(dbname, user, host, password):
 def create_database(root_dir):
 	auth_db = root_dir + "app/db/Auth.db"
 	user_info_db = root_dir + "app/db/User_info.db"
-	if not os.path.isfile(auth_db):
-		open(auth_db, 'a').close()
+	if not os.path.isfile(Auth.db):
+		open(Auth.db, 'a').close()
 		cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
 		# 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
 		# Generated with echo "Auth_db_user" | openssl sha1
 		cur.execute("""{}""".format(auth_schema()))
 	if not os.path.isfile(user_info_db):
-		open(user_info_db, 'a').close()
-		cur = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+		open(User_info.db, 'a').close()
+		cur = database_conn("User_info.db", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
 		# 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
 		# Generated with echo "User_info_db_user" | openssl sha1
 		cur.execute("""{}""".format(user_info_schema()))
