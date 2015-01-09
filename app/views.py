@@ -17,7 +17,7 @@ def wrap_tags(content, tag):
 	return "<" + str(tag) + ">" + str(content) + "</" + str(tag) + ">"
 root_dir = str(__file__[:-13])
 
-create_database(root_dir)
+actions.create_database(root_dir)
 
 
 @login_manager.user_loader
