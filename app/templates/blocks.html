@@ -1,34 +1,35 @@
 {% extends base.html %}
 {% block top_bar %}
-	<div id="top_bar">
-		<img src="static/images/logo.png">
-		<form action="" method="post" name="search">
-			<p>
-				{{ form.search }}
-			</p>
-		</form>
-		<ul id="top_bar_links">
-			{% for elem in content.top_bar_links %}
-				<li>
-					<a href="/links"{{ elem }}>{{ elem }}</a>
-				</li>
-			{% endfor %}
-		</ul>
-		{% for elem in content.top_bar_actions %}
-			<a class={{ elem }} href="/"{{ elem }}>{{ elem }}</a>
-		{% endfor %}
-	</div>
-	<hr>
+    <div id="top_bar">
+        <img src="static/images/logo.png">
+
+        <form action="" method="post" name="search">
+            <p>
+                {{ form.search }}
+            </p>
+        </form>
+        <ul id="top_bar_links">
+            {% for elem in content.top_bar_links %}
+                <li>
+                    <a href="/links"{{ elem }}>{{ elem }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% for elem in content.top_bar_actions %}
+            <a class={{ elem }} href="/"{{ elem }}>{{ elem }}</a>
+        {% endfor %}
+    </div>
+    <hr>
 {% endblock %}
 {% block footer %}
-	<div id="footer">
-		{{ content.legal }}
-		<ul class="bottom_bar_links">
-			{% for elem in content.bottom_bar_links %}
-				<li>
-					<a href="/links"{{ elem }}>{{ elem }}</a>
-				</li>
-			{% endfor %}
-		</ul>
-	</div>
+    <div id="footer">
+        {{ content.legal }}
+        <ul class="bottom_bar_links">
+            {% for elem in content.bottom_bar_links %}
+                <li>
+                    <a href="/links"{{ elem }}>{{ elem }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
