@@ -1,7 +1,7 @@
 import os
 
 from flask import render_template, redirect, request, session, g
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, current_user
 
 from app import app
 from app.func import md_to_html
@@ -31,7 +31,6 @@ def load_user(userid):
 
 @app.before_request
 def before_req():
-    current_user = {}
     g.user = current_user
 
 
@@ -66,11 +65,12 @@ def logout():
 def signup():
     if request.method == 'POST':
         form = LoginForm()
+        user_info = {}
         if form.validate_on_submit():
             user_info["username"] = form.userid.data
             user_info["password"] = form.password.data
             user_info["email"] = form.email.data
-            data = sign_up_user(user_info)
+            data = actions.sign_up_user(user_info)
             if type(data) == "<type 'tuple'>":
                 content["error"] = data[1]
             else:
@@ -118,12 +118,11 @@ def present(presentation_name, slide_number=1):
 @app.route('/<username>')
 def user_page(username):
     user_info = actions.get_user_details(username)
+    content = {}
     if g.user.is_authenticated():
         if username == g.user["username"]:
             content["ownpage"] = True
-            content
         else:
             content["ownpage"] = False
-
     return render_template('user_page.html', content=content, user_info=user_info)
 
