@@ -5,6 +5,12 @@
     <title></title>
 </head>
 <body>
-
+{% if content.presentation_links %}
+	<div id="presentations_container">
+		{% for elem in content.presentation_links %}
+			<a href={{ content.current_page_username }}/p/{{ elem }}><ul>{{ elem }}</ul>
+		{% endfor %}
+	</div>
+{% endif %}
 </body>
 </html>

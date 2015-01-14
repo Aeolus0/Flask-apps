@@ -91,10 +91,10 @@ def root():
 
 @app.route('/<username>/p/<presentation_name>')
 @app.route('/<username>/p/<presentation_name>/<int:slide_number>')
-def present(presentation_name, slide_number=1):
+def present(username, presentation_name, slide_number=1):
     content = md_to_html.md_to_html(
-        root_dir + "/presentations/" + str(presentation_name) + "/" + str(slide_number) + ".md")
-    for elem in os.listdir("presentations/" + str(presentation_name)):
+        root_dir + "/presentations/" + str(username) + "/" + str(presentation_name) + "/" + str(slide_number) + ".md")
+    for elem in os.listdir("presentations/" + str(username) + "/" + str(presentation_name)):
         temp = elem[:-3]
         temp = int(temp)
         prev_temp = 0
@@ -119,6 +119,11 @@ def present(presentation_name, slide_number=1):
 def user_page(username):
     user_info = actions.get_user_details(username)
     content = {}
+    content["current_page_username"] = username
+    pres_list = os.listdir("presentations/" + str(username))
+    for iter in range(0, len(pres_list)):
+        pres_list[iter] = pres_list[iter].replace(" ", "%20")
+    content["presentation_links"] = pres_list
     if g.user.is_authenticated():
         if username == g.user["username"]:
             content["ownpage"] = True
