@@ -1,7 +1,7 @@
 import os
 
 from flask import render_template, redirect, request, session, g
-from flask.ext.login import LoginManager, current_user
+from flask.ext.login import LoginManager, current_user, login_user
 
 from app import app
 from app.func import md_to_html
@@ -10,18 +10,20 @@ from app.db import actions
 
 
 app.config.from_object('config')
-
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-def wrap_tags(content, tag):
-    return "<" + str(tag) + ">" + str(content) + "</" + str(tag) + ">"
-
-
 root_dir = str(__file__[:-13])
-
 actions.create_database(root_dir)
+
+
+
+def is_user_ownpage(username, content):
+    if g.user.is_authenticated():
+        if username == g.user["username"]:
+            content["ownpage"] = True
+        else:
+            content["ownpage"] = False
+
 
 
 @login_manager.user_loader
@@ -60,7 +62,7 @@ def login():
 def logout():
     if 'logged_in' in session:
         del session['logged_in']
-    return redirect('/')
+    return redirect('base.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -86,51 +88,40 @@ def signup():
 @app.route('/')
 @app.route('/index')
 def root():
-    content = []
-    for elem in os.listdir(root_dir + "/presentations"):
-        temp = "<a href=\"" + "/" + str(elem) + "\">" + str(elem) + "</a>"
-        content.append(wrap_tags(temp, "h5"))
-    content = "\n".join(content)
-    return render_template('index.html', content=content)
+    content = {}
+    content["pagetype"] = "index"
+    return render_template('base.html', content=content)
+
 
 
 @app.route('/<username>/p/<presentation_name>')
 @app.route('/<username>/p/<presentation_name>/<int:slide_number>')
 def present(username, presentation_name, slide_number=1):
+    prev_temp = 0
+    content ={}
+    content["pagetype"] = "presentation"
     content = md_to_html.md_to_html(
         root_dir + "/presentations/" + str(username) + "/" + str(presentation_name) + "/" + str(slide_number) + ".md")
     for elem in os.listdir("presentations/" + str(username) + "/" + str(presentation_name)):
         temp = elem[:-3]
         temp = int(temp)
-        prev_temp = 0
         if temp > prev_temp:
             content["number_of_slides"] = temp
         prev_temp = temp
     content["presentation_name"] = presentation_name
     content["slide_number"] = slide_number
-    content["slidetitle"] = wrap_tags(content["slidetitle"], "h1")
     content["next_page_link"] = "/presentations/" + str(presentation_name) + "/" + str(slide_number + 1)
-    if content["firstline"] == "title\r" or content["firstline"] == "title":
-        return render_template('Title.html', content=content)
-    elif content["firstline"] == "heading\r" or content["firstline"] == "heading":
-        return render_template('Heading.html', content=content)
-    elif content["firstline"] == "slide\r" or content["firstline"] == "" or content["firstline"] == "slide":
-        return render_template('Slide.html', content=content)
-    else:
-        return render_template("Something_went_wrong.html")
+    return render_template('base.html', content=content)
 
 
 @app.route('/<username>')
 def user_page(username):
     user_info = actions.get_user_details(username)
     content = {}
+    content["pagetype"] = "user_page"
     content["current_page_username"] = username
     pres_list = os.listdir("presentations/" + str(username))
     content["presentation_links"] = pres_list
-    if g.user.is_authenticated():
-        if username == g.user["username"]:
-            content["ownpage"] = True
-        else:
-            content["ownpage"] = False
-    return render_template('user_page.html', content=content, user_info=user_info)
+    is_user_ownpage(username, content)
+    return render_template('base.html', content=content, user_info=user_info)
 
