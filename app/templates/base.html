@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{ content.title }}</title>
+</head>
+<body>
+    {% block header %}
+    {% endblock %}
+
+    {# this if/elif/else structure here takes whatever is in the blocks, wraps them in the header and footer blocks
+       and renders it. this should be the final version, as all i have to do now is edit content specific html per
+       block. #}
+
+	{% if "user_page" in content.pagetype %}
+        {% block user_page %}
+        {% endblock %}
+
+    {# this presentation block will have to ignore the header and footer divs in immersive mode, so that it dosent
+       clutter up the slide. Will probably use arrow keys or WASD to navigate, or any key to move forward and
+       left arrow key to move back. #}
+
+    {% elif "presentation" in content.pagetype %}
+        {% block slide %}
+        {% endblock %}
+
+    {# user_actions will encapsulate both login and signup, just with a change in the form in the page #}
+
+    {% elif "user_actions" in content.pagetype %}
+        {% block user_login %}
+        {% endblock %}
+
+    {# these two statements handle errors, both numerical http errors (404/500/etc.) and the case when
+       content.pagetype is not specified. Both will result in an error log line. #}
+
+    {% elif "error" in content.pagetype %}
+        {% block error %}
+            {{ content.error }}
+        {% endblock %}
+
+    {% else %}
+        {% block error %}
+            no pagetype specified
+        {% endblock %}
+
+    {% endif %}
+
+    {% block footer %}
+    {% endblock %}
+</body>
+</html>

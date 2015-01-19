@@ -37,6 +37,8 @@ def before_req():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     content = {}
+    content["pagetype"] = "user_actions"
+    content["action_type"] = "login"
     form = LoginForm()
     user_info = {}
     if request.method == 'POST':
@@ -51,7 +53,7 @@ def login():
                 content["error"] = "Invalid username or password"
         else:
             content["error"] = "Invalid data in field"
-    return render_template('login.html', form=form, content=content)
+    return render_template('base.html', form=form, content=content)
 
 
 @app.route('/logout')
@@ -63,6 +65,9 @@ def logout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    content = {}
+    content["pagetype"] = "user_actions"
+    content["action_type"] = "signup"
     if request.method == 'POST':
         form = LoginForm()
         user_info = {}
@@ -75,7 +80,7 @@ def signup():
                 content["error"] = data[1]
             else:
                 return redirect('/' + user_info["username"])
-    return render_template('signup.html')
+    return render_template('base.html', content=content)
 
 
 @app.route('/')
