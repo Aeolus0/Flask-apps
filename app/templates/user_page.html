@@ -5,14 +5,16 @@
     <title>{{ content.title }}</title>
 </head>
 <body>
-	{% block header %}{% endblock %}
+	{% block header %}
+    {% endblock %}
 	{% if content.presentation_links %}
 		<div id="presentations_container">
 			{% for elem in content.presentation_links %}
-				<a href={{ content.current_page_username }}/p/{{ elem }}><ul>{{ elem }}</ul>
+				<a href="{{ content.current_page_username }}/p/{{ elem }}"><ul>{{ elem }}</ul>
 			{% endfor %}
 		</div>
 	{% endif %}
-	{% block footer %}{% endblock %}
+	{% block footer %}
+    {% endblock %}
 </body>
 </html>

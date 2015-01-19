@@ -121,8 +121,6 @@ def user_page(username):
     content = {}
     content["current_page_username"] = username
     pres_list = os.listdir("presentations/" + str(username))
-    for iter in range(0, len(pres_list)):
-        pres_list[iter] = pres_list[iter].replace(" ", "%20")
     content["presentation_links"] = pres_list
     if g.user.is_authenticated():
         if username == g.user["username"]:
