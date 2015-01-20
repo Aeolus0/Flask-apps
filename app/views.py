@@ -90,7 +90,7 @@ def signup():
 def root():
     content = {}
     content["pagetype"] = "index"
-    return render_template('base.html', content=content)
+    return render_template('index.html', content=content)
 
 
 
