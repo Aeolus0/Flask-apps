@@ -49,7 +49,7 @@ def create_database(root_dir):
         cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
         # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
         # Generated with echo "Auth_db_user" | openssl sha1
-        cur.execute("%s".auth_schema())
+        cur.execute("{}".format(auth_schema()))
     if not os.path.isfile(user_info_db):
         open(user_info_db, 'a').close()
         cur = database_conn("User_info.db", "User_info_db_user", "localhost",
