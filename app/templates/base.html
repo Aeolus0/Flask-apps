@@ -1,49 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <title>{{ content.title }}</title>
+    <link rel="stylesheet" href="../static/css/base.css">
 </head>
 <body>
-    {% block header %}
+    <div id="header">
+        <hr id="v_header">
+            <img src="static/images/logo.png">
+        <hr id="v_header">
+        <form action="" method="post" name="search" id="header_search">
+            <input type="text" placeholder="Search Present.ly">
+        </form>
+        <div id="header_links">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+
+        {% if current_user.is_authenticated() %}
+
+            <div id="logged_in_actions">
+
+            </div>
+
+        {% else %}
+
+            <div id="not_logged_in_actions">
+                <form action="signup.html">
+                    <input type="submit" value="Sign Up">
+                </form>
+                <form action="login.html">
+                    <input type="submit" value="Log In">
+                </form>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    {% block content %}
+
     {% endblock %}
 
-    {# this if/elif/else structure here takes whatever is in the blocks, wraps them in the header and footer blocks
-       and renders it. this should be the final version, as all i have to do now is edit content specific html per
-       block. #}
-
-    {% if "index" in content.pagetype %}
-        {% block index %}
-        {% endblock %}
-
-	{% elif "user_page" in content.pagetype %}
-        {% block user_page %}
-        {% endblock %}
-
-    {# this presentation block will have to ignore the header and footer divs in immersive mode, so that it dosent
-       clutter up the slide. Will probably use arrow keys or WASD to navigate, or any key to move forward and
-       left arrow key to move back. #}
-
-    {% elif "presentation" in content.pagetype %}
-        {% block slide %}
-        {% endblock %}
-
-    {# user_actions will encapsulate both login and signup, just with a change in the form in the page #}
-
-    {% elif "user_actions" in content.pagetype %}
-        {% block user_login %}
-        {% endblock %}
-
-    {# this handles http errors, like 404 and 500, and will log this #}
-
-    {% elif "error" in content.pagetype %}
-        {% block error %}
-            {{ content.error }}
-        {% endblock %}
-
-    {% endif %}
-
-    {% block footer %}
-    {% endblock %}
+    <div id="footer">
+        &copy 2015 Dhasharath Shrivathsa
+    </div>
 </body>
 </html>

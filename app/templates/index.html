@@ -1,16 +1,24 @@
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Index of presentations</title>
-    <link rel="stylesheet" href="/static/css/index.css">
-</head>
-<body>
-<div id="index-title">
-    Index of presentations
-    <img src="/static/images/presentation.png" id="index-title-image">
-</div>
-<div id="pres-names">
-    {{ content|safe }}
-</div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <div id="left_box">
+        <img src="../static/userimages/{{ content.username }}/avatar.png">
+        <ul>
+            {# expects a dict with the key being what kind of link, and the val being the link #}
+            {% for key, value in content.profile_links.iteritems() %}
+                {# special case for email, resulting in a mailto: link #}
+                {% if "email" in key %}
+                    <a href="mailto:{{ value }}">{{ value }}</a>
+                {# special case for github, gives link to github via Github username #}
+                {% elif "github" in key %}
+                    <a href="https://github.com/{{ value }}">{{ content.username }}'s Github</a>
+                {# special case for website #}
+                {% elif "website" in key %}
+                    <a href="{{ value }}">{{ content.username }}'s Website</a>
+                {# if it's another kind of link, just display it #}
+                {% else %}
+                    <a href="{{ value }}">{{ value }}</a>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
