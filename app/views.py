@@ -1,7 +1,7 @@
 import os
 
 from flask import render_template, redirect, request, session, g
-from flask.ext.login import LoginManager, current_user, login_user
+from flask.ext.login import LoginManager, current_user, login_user, login_required
 
 from app import app
 from app.func import md_to_html
@@ -59,17 +59,16 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     if 'logged_in' in session:
         del session['logged_in']
-    return redirect('base.html')
+    return redirect('index.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     content = {}
-    content["pagetype"] = "user_actions"
-    content["action_type"] = "signup"
     if request.method == 'POST':
         form = LoginForm()
         user_info = {}
@@ -89,7 +88,6 @@ def signup():
 @app.route('/index')
 def root():
     content = {}
-    content["pagetype"] = "index"
     return render_template('index.html', content=content)
 
 
@@ -98,9 +96,8 @@ def root():
 @app.route('/<username>/p/<presentation_name>/<int:slide_number>')
 def present(username, presentation_name, slide_number=1):
     prev_temp = 0
-    content ={}
-    content["pagetype"] = "presentation"
-    content = md_to_html.md_to_html(
+    content = {}
+    content["presentation_content"] = md_to_html.md_to_html(
         root_dir + "/presentations/" + str(username) + "/" + str(presentation_name) + "/" + str(slide_number) + ".md")
     for elem in os.listdir("presentations/" + str(username) + "/" + str(presentation_name)):
         temp = elem[:-3]
@@ -118,10 +115,9 @@ def present(username, presentation_name, slide_number=1):
 def user_page(username):
     user_info = actions.get_user_details(username)
     content = {}
-    content["pagetype"] = "user_page"
     content["current_page_username"] = username
     pres_list = os.listdir("presentations/" + str(username))
     content["presentation_links"] = pres_list
     is_user_ownpage(username, content)
-    return render_template('base.html', content=content, user_info=user_info)
+    return render_template('user_page.html', content=content, user_info=user_info)
 
