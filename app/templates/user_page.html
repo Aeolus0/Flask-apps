@@ -1,20 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>{{ content.title }}</title>
-</head>
-<body>
-	{% block header %}
-    {% endblock %}
-	{% if content.presentation_links %}
-		<div id="presentations_container">
+{% extends "base.html" %}
+{% block content %}
+    <div id="left_box">
+        <img src="../static/userimages/{{ content.username }}/avatar.png">
+		{# check if dict is empty, if it is, don't render anything #}
+        {% if content.profile_links != {} %}
+			<ul>
+				{# expects a dict with the key being what kind of link, and the val being the link #}
+				{% for key, value in content.profile_links.iteritems() %}
+					{# special case for email, resulting in a mailto: link #}
+					{% if "email" in key %}
+						<li><a href="mailto:{{ value }}">{{ value }}</a></li>
+					{# special case for github, gives link to github via Github username #}
+					{% elif "github" in key %}
+						<li><a href="https://github.com/{{ value }}">{{ content.username }}'s Github</a></li>
+					{# special case for website #}
+					{% elif "website" in key %}
+						<li><a href="{{ value }}">{{ content.username }}'s Website</a></li>
+					{# if it's another kind of link, just display it #}
+					{% else %}
+						<li><a href="{{ value }}">{{ value }}</a></li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+    	{% endif %}
+    </div>
+	<div id="presentations_container">
+    	<ul>
+        {# if there are no presentations, render "No presentations yet" #}
+    	{% if content.presenstation_links != {} %}
+            {# render up to 5 presentations in the box, if there are more, render a link to all of them #}
 			{% for elem in content.presentation_links %}
-				<a href="{{ content.current_page_username }}/p/{{ elem }}"><ul>{{ elem }}</ul>
+				{% if loop.index < 6 %}
+					<li><a href="{{ content.current_page_username }}/p/{{ elem }}">{{ elem }}</a></li>
+				{% elif loop.index == 6 %}
+					<li><a href="{{ content.current_page_username }}/p/list">See all presentations</a></li>
+				{% else %}
+				{% endif %}
 			{% endfor %}
-		</div>
-	{% endif %}
-	{% block footer %}
-    {% endblock %}
-</body>
-</html>
+        {% else %}
+        	<li>No presentations yet!</li>
+        {% endif %}
+    	</ul>
+    </div>
+{% endblock %}

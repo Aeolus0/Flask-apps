@@ -1,24 +1,4 @@
 {% extends "base.html" %}
 {% block content %}
-    <div id="left_box">
-        <img src="../static/userimages/{{ content.username }}/avatar.png">
-        <ul>
-            {# expects a dict with the key being what kind of link, and the val being the link #}
-            {% for key, value in content.profile_links.iteritems() %}
-                {# special case for email, resulting in a mailto: link #}
-                {% if "email" in key %}
-                    <a href="mailto:{{ value }}">{{ value }}</a>
-                {# special case for github, gives link to github via Github username #}
-                {% elif "github" in key %}
-                    <a href="https://github.com/{{ value }}">{{ content.username }}'s Github</a>
-                {# special case for website #}
-                {% elif "website" in key %}
-                    <a href="{{ value }}">{{ content.username }}'s Website</a>
-                {# if it's another kind of link, just display it #}
-                {% else %}
-                    <a href="{{ value }}">{{ value }}</a>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
+    <h1> Index/Home </h1>
 {% endblock %}
