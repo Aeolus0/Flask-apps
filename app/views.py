@@ -38,11 +38,11 @@ def before_req():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    content = {}
+    content = dict()
     content["pagetype"] = "user_actions"
     content["action_type"] = "login"
     form = LoginForm()
-    user_info = {}
+    user_info = dict()
     if request.method == 'POST':
         if form.validate_on_submit():
             user_info["username"] = form.userid.data
@@ -71,7 +71,7 @@ def signup():
     content = {}
     if request.method == 'POST':
         form = LoginForm()
-        user_info = {}
+        user_info = dict()
         if form.validate_on_submit():
             user_info["username"] = form.userid.data
             user_info["password"] = form.password.data
@@ -87,7 +87,7 @@ def signup():
 @app.route('/')
 @app.route('/index')
 def root():
-    content = {}
+    content = dict()
     return render_template('index.html', content=content)
 
 
@@ -96,7 +96,7 @@ def root():
 @app.route('/<username>/p/<presentation_name>/<int:slide_number>')
 def present(username, presentation_name, slide_number=1):
     prev_temp = 0
-    content = {}
+    content = dict()
     content["presentation_content"] = md_to_html.md_to_html(
         root_dir + "/presentations/" + str(username) + "/" + str(presentation_name) + "/" + str(slide_number) + ".md")
     for elem in os.listdir("presentations/" + str(username) + "/" + str(presentation_name)):
@@ -114,7 +114,7 @@ def present(username, presentation_name, slide_number=1):
 @app.route('/<username>')
 def user_page(username):
     user_info = actions.get_user_details(username)
-    content = {}
+    content = dict()
     content["current_page_username"] = username
     pres_list = os.listdir("presentations/" + str(username))
     content["presentation_links"] = pres_list
