@@ -68,9 +68,9 @@ def logout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    content = {}
+    content = dict()
+    form = LoginForm()
     if request.method == 'POST':
-        form = LoginForm()
         user_info = dict()
         if form.validate_on_submit():
             user_info["username"] = form.userid.data
@@ -81,14 +81,19 @@ def signup():
                 content["error"] = data[1]
             else:
                 return redirect('/' + user_info["username"])
-    return render_template('signup.html', content=content)
+    return render_template('signup.html', content=content, form=form)
 
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 def root():
     content = dict()
-    return render_template('index.html', content=content)
+    form = IndexForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            content["result"] = actions.search_user_and_pres(form.search.data)
+            return render_template('search.html', content=content, form=form)
+    return render_template('index.html', content=content, form=form)
 
 
 
@@ -108,7 +113,7 @@ def present(username, presentation_name, slide_number=1):
     content["presentation_name"] = presentation_name
     content["slide_number"] = slide_number
     content["next_page_link"] = "/presentations/" + str(presentation_name) + "/" + str(slide_number + 1)
-    return render_template('base.html', content=content)
+    return render_template('presentation.html', content=content)
 
 @app.route('/<username>/p/list')
 def list_pres(username):
