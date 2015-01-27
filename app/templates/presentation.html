@@ -1,19 +1,25 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/static/css/Title.css">
-    <title>{{ content.title|safe }}</title>
+    {% if content.presentation_content.firstline == "title" %}
+        <link rel="stylesheet" href="/static/css/title.css">
+    {% elif content.presentation_content.firstline == "subheading" %}
+        <link rel="stylesheet" href="/static/css/heading.css">
+    {% else %}
+       <link rel="stylesheet" href="/static/css/slide.css">
+    {% endif %}
+    <title>{{ content.presentation_content.title|safe }}</title>
 </head>
 <body>
 <div id="slide-title">
-    {{ content.slidetitle|safe }}
+    {{ content.presentation_content.slidetitle|safe }}
     <img id="slide-title-image" src={{ content.imageurl|safe }}>
 </div>
 
 <hr>
 
 <div id="slide-content">
-    {{ content.slidecontent|safe }}
+    {{ content.presentation_content.slidecontent|safe }}
 </div>
 
 <hr>
