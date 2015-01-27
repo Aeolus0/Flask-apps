@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
     <div id="left_box">
-        <img src="../static/userimages/{{ content.username }}/avatar.png">
+    	{# if the user has set an avatar then use it, otherwhise use the stock image #}
+    	{% if content.avatar %}
+            <img src="../static/userimages/{{ content.username }}/avatar.png">
+    	{% else %}
+            <img src="../static/images/stockuserimg.png">
+    	{% endif %}
+
 		{# check if dict is empty, if it is, don't render anything #}
         {% if content.profile_links != {} %}
 			<ul>
