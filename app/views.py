@@ -81,7 +81,7 @@ def signup():
                 content["error"] = data[1]
             else:
                 return redirect('/' + user_info["username"])
-    return render_template('base.html', content=content)
+    return render_template('signup.html', content=content)
 
 
 @app.route('/')
@@ -109,6 +109,14 @@ def present(username, presentation_name, slide_number=1):
     content["slide_number"] = slide_number
     content["next_page_link"] = "/presentations/" + str(presentation_name) + "/" + str(slide_number + 1)
     return render_template('base.html', content=content)
+
+@app.route('/<username>/p/list')
+def list_pres(username):
+    content = dict()
+    pres_names = os.listdir("presentations/" + str(username))
+    content["presentation_list"] = pres_names
+    content["current_page_username"] = str(username)
+    return render_template('list.html', content=content)
 
 
 @app.route('/<username>')
