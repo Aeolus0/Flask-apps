@@ -10,7 +10,7 @@ import psycopg2
 
 def auth_schema():
     auth_schema_var = """CREATE TABLE Auth
-	(id INT SERIAL PRIMARY KEY NOT NULL,
+	(id BIGINT PRIMARY KEY NOT NULL,
 	username              TEXT NOT NULL,
 	password_salted       TEXT NOT NULL,
 	email                 TEXT NOT NULL
@@ -21,7 +21,7 @@ def auth_schema():
 
 def user_info_schema():
     user_info_schema_var = """CREATE TABLE User_info
-	(id INT SERIAL PRIMARY KEY NOT NULL,
+	(id BIGINT PRIMARY KEY NOT NULL,
 	name                  TEXT,
 	location              TEXT,
 	github                TEXT,
@@ -52,8 +52,7 @@ def create_database(root_dir):
         cur.execute("{}".format(auth_schema()))
     if not os.path.isfile(user_info_db):
         open(user_info_db, 'a').close()
-        cur = database_conn("User_info.db", "User_info_db_user", "localhost",
-                            "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+        cur = database_conn("User_info.db", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
         # 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
         # Generated with echo "User_info_db_user" | openssl sha1
         cur.execute("{}".format(user_info_schema()))
@@ -92,7 +91,7 @@ def sign_up_user(user_info):
         # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
         # Generated with echo "Auth_db_user" | openssl sha1
         password_salted = bcrypt.hashpw(user_info["password"], bcrypt.gensalt())
-        if ((cur.execute("SELECT * FROM Auth(username) WHERE username = {}".format(
+        if ((cur.execute("SELECT * FROM Auth(username) WHERE username={}".format(
                 user_info["username"]) != ""))):  # TODO: i think i need to expad upon the != "" thing
             return (False, "Username already taken")
         if ((cur.execute("SELECT * FROM Auth(email) WHERE email = {}".format(
