@@ -1,3 +1,9 @@
+html, body{
+
+    padding: 0px;
+    margin: 0px;
+}
+
 #v_header {
     height: 100px;
     width: 5px;

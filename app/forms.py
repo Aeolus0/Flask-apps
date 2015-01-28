@@ -14,3 +14,6 @@ class ManageForm(Form):
     email = StringField(u'email', validators=[Email()])
     password = PasswordField(u'password', validators=[DataRequired()])
     repeat_password = PasswordField(u'repeat_password', validators=[DataRequired(), EqualTo('password', message="Passwords must match")])
+
+class IndexForm(Form):
+    search = StringField(u'search', default="Search Present.ly")

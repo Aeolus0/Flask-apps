@@ -9,7 +9,8 @@
             <img src="../static/images/logo.png">
         <hr id="v_header">
         <form action="" method="post" name="search" id="header_search">
-            <input type="text" placeholder="Search Present.ly">
+            {{ form.csrf_token }}
+            <p>{{ form.search() }}</p>
         </form>
         <div id="header_links">
             <ul>
