@@ -9,7 +9,7 @@
     	{% endif %}
 
 		{# check if dict is empty, if it is, don't render anything #}
-        {% if content.profile_links != {} %}
+        {% if content.profile_links is defined %}
 			<ul>
 				{# expects a dict with the key being what kind of link, and the val being the link #}
 				{% for key, value in content.profile_links.iteritems() %}
