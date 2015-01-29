@@ -84,13 +84,15 @@ def sign_up_user(user_info):
 
         # store the username, salted password and email
         password_salted = bcrypt.hashpw(user_info["password"], bcrypt.gensalt())
-        cur.execute("INSERT INTO auth(username, password_salted, email) values (\'{}\',\'{}\', \'{}\');".format(user_info["username"], password_salted, user_info["email"]))
+        cur.execute("INSERT INTO auth(username, password_salted, email) values (\'{}\',\'{}\',\'{}\');".format(user_info["username"], password_salted, user_info["email"]))
 
 
-        cur2 = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+        cur2 = database_conn("user_info", "user_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
         # 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
         # Generated with echo "User_info_db_user" | openssl sha1
-        cur2.execute("INSERT INTO user_info(join_date) values (\'{}\');".format(time.strftime("%Y/%m/%d"))
+
+        # Join date for metrics
+        cur2.execute("INSERT INTO user_info(join_date) values (\'{}\');".format(time.strftime("%Y/%m/%d")))
         return (True, "User signed up")
     except:
         return (False, "Unable to establish database connection")
