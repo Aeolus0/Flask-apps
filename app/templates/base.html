@@ -5,40 +5,43 @@
 </head>
 <body>
     <div id="header">
-        <hr id="v_header">
-            <img src="../static/images/logo.png">
-        <hr id="v_header">
-        <form action="" method="post" name="search" id="header_search">
-            {{ search.csrf_token }}
-            <p>{{ search.search() }}</p>
-        </form>
-        <div id="header_links">
-            <ul>
-                <li><a href="index">Home</a></li>
-                <li><a href="blog">Blog</a></li>
-            </ul>
+
+        <div id="header_wrap">        
+            
+            <img id="logo" src="../static/images/logo.png">
+            
+            <form action="" method="post" name="search" id="header_search">
+                {{ search.csrf_token }}
+                <p>{{ search.search() }}</p>
+            </form>
+
+                <ul id="header_links">
+                    <li><a href="index">Home</a></li>
+                    <li><a href="blog">Blog</a></li>
+                </ul>
+
+            {% if current_user.is_authenticated() %}
+
+                <div id="logged_in_actions">
+
+                </div>
+
+            {% else %}
+
+                <div id="not_logged_in_actions">
+                    <form method="link" action="signup">
+                        <input type="submit" value="Sign Up">
+                    </form>
+                    <form method="link" action="login">
+                        <input type="submit" value="Log In">
+                    </form>
+                </div>
+
+            {% endif %}
+
         </div>
-
-        {% if current_user.is_authenticated() %}
-
-            <div id="logged_in_actions">
-
-            </div>
-
-        {% else %}
-
-            <div id="not_logged_in_actions">
-                <form method="link" action="signup">
-                    <input type="submit" value="Sign Up">
-                </form>
-                <form method="link" action="login">
-                    <input type="submit" value="Log In">
-                </form>
-            </div>
-
-        {% endif %}
-
     </div>
+
 
     {% block content %}
 

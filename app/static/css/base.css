@@ -4,8 +4,127 @@ html, body{
     margin: 0px;
 }
 
-#v_header {
-    height: 100px;
-    width: 5px;
-    background: #585858;
+#header{
+
+	top: 0px;
+	left: 0px;
+
+	width: 100%;
+	height: 40px;
+	background-color: #888;
 }
+
+#logo{
+
+	width: 32px;
+	height: 32px;
+
+	border-left: 3px solid #FFF;
+	border-right: 3px solid #FFF;
+
+	float: left;
+
+	margin: 4px 0px;
+}
+
+#header_search{
+
+	margin: 5px 0px;
+
+	float: left;
+
+	position: relative;
+}
+
+#header_search p{
+
+	margin: 0px;
+	padding: 0px;
+}
+
+#header_links{
+
+	list-style: none;
+	margin: 10.6px 0px;
+	padding: 0;
+
+	float: left;
+
+	position: relative;
+}
+
+#header_links li{
+
+	display: inline;
+}
+
+#header_links a{
+
+
+	text-decoration: none;
+	color: #000;
+
+	font-family: "DejaVu Sans 18";
+}
+
+#not_logged_in_actions{
+
+	float: right;
+	position: relative;
+
+	margin: 5px 0px;
+}
+
+#not_logged_in_actions form{
+
+	display: inline;
+}
+
+
+#logged_in_actions{
+
+	float: right;
+	position: relative;
+
+	margin: 5px 0px;
+}
+
+#logged_in_actions form{
+
+	display: inline;
+}
+
+
+#logo, #header_search, #header_links{
+
+	margin-right: 20px;
+}
+
+form input[type="text"]{
+
+	height: 30px;
+	width: 200px;
+
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+
+form input[type="submit"]{
+
+	height: 30px;
+	width: 50px;
+
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+#header_wrap{
+
+	width: 80%;
+
+	margin: 0 auto;
+}
+
