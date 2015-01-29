@@ -33,7 +33,7 @@
 	<div id="presentations_container">
     	<ul>
         {# if there are no presentations, render "No presentations yet" #}
-    	{% if content.presenstation_links != {} %}
+    	{% if content.presentation_links is defined %}
             {# render up to 5 presentations in the box, if there are more, render a link to all of them #}
 			{% for elem in content.presentation_links %}
 				{% if loop.index < 6 %}

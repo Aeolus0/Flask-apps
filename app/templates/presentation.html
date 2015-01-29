@@ -29,7 +29,7 @@
     <! as well as the mini image >
 
     <div id="next-slide">
-        <a href={{ content.next_page_link|safe }}><img src="/static/icons/arrow_right_colored.png" border="0"
+        <a href="{{ content.next_page_link|e }}"><img src="/static/icons/arrow_right_colored.png" border="0"
                                                        alt="Next Slide" style="opacity: .5;"></a>
     </div>
 </div>
