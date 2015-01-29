@@ -12,8 +12,8 @@ from app.db import actions
 app.config.from_object('config')
 login_manager = LoginManager()
 login_manager.init_app(app)
-root_dir = str(__file__[:-13])
-actions.create_database(root_dir)
+
+
 
 
 
@@ -47,7 +47,7 @@ def login():
         if form.validate_on_submit():
             user_info["username"] = form.userid.data
             user_info["password"] = form.password.data
-            if actions.auth_user(user_info):
+            if actions.auth_user(user_info)[0]:
                 login_user(user_info["username"])
                 g.user.update(actions.get_user_details(user_info["username"]))
                 return redirect('/' + user_info["username"])
@@ -76,8 +76,7 @@ def signup():
             user_info["username"] = form.userid.data
             user_info["password"] = form.password.data
             user_info["email"] = form.email.data
-            data = actions.sign_up_user(user_info)
-            if type(data) == "<type 'tuple'>":
+            if not actions.sign_up_user(user_info)[0]:
                 content["error"] = data[1]
             else:
                 return redirect('/' + user_info["username"])

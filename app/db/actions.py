@@ -8,54 +8,33 @@ import psycopg2
 ###### Fundamentals ######
 ##########################
 
-def auth_schema():
-    auth_schema_var = """CREATE TABLE Auth
-	(id BIGINT PRIMARY KEY NOT NULL,
-	username              TEXT NOT NULL,
-	password_salted       TEXT NOT NULL,
-	email                 TEXT NOT NULL
-	)
-	"""
-    return auth_schema_var
+
+##########################
+######    Schema    ######
+##########################
+#   CREATE TABLE Auth
+# 	(id BIGINT PRIMARY KEY NOT NULL,
+#	username              TEXT NOT NULL,
+#	password_salted       TEXT NOT NULL,
+#	email                 TEXT NOT NULL
+#	);
 
 
-def user_info_schema():
-    user_info_schema_var = """CREATE TABLE User_info
-	(id BIGINT PRIMARY KEY NOT NULL,
-	name                  TEXT,
-	location              TEXT,
-	github                TEXT,
-	linkedin              TEXT,
-	website               TEXT,
-	email                 TEXT
-	)"""
-    return user_info_schema_var
 
+#   CREATE TABLE User_info
+#   (id BIGINT PRIMARY KEY NOT NULL,
+#	name                  TEXT,
+#	location              TEXT,
+#	join_date             TEXT
+#   );
 
 def database_conn(dbname, user, host, password):
     try:
         conn = psycopg2.connect("dbname='{}' user='{}' host='{}' password='{}'".format(dbname, user, host, password))
-        cur = conn.cursor
+        cur = conn.cursor()
         return cur
     except:
-        return (False, "Something went wrong in the database bits")
-
-
-def create_database(root_dir):
-    auth_db = root_dir + "/app/db/Auth.db"
-    user_info_db = root_dir + "/app/db/User_info.db"
-    if not os.path.isfile(auth_db):
-        open(auth_db, 'a').close()
-        cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
-        # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
-        # Generated with echo "Auth_db_user" | openssl sha1
-        cur.execute("{}".format(auth_schema()))
-    if not os.path.isfile(user_info_db):
-        open(user_info_db, 'a').close()
-        cur = database_conn("User_info.db", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
-        # 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
-        # Generated with echo "User_info_db_user" | openssl sha1
-        cur.execute("{}".format(user_info_schema()))
+        return (False, "Something went wrong in the database connection")
 
 
 ##########################
@@ -65,17 +44,17 @@ def create_database(root_dir):
 
 def auth_user(user_info):
     try:
-        cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
+        cur = database_conn("auth", "auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
         # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
         # Generated with echo "Auth_db_user" | openssl sha1
-        cur.execute("SELECT * FROM Auth WHERE username = {}".format(user_info["username"]))
+        cur.execute("SELECT * FROM auth WHERE username={};".format(user_info["username"]))
         username_non_auth = cur.fetchall()
         password_hash_loc = 2
-        if username_non_auth[password_hash_loc] == bcrypt.hashpw(user_info["password"],
-                                                                 username_non_auth[password_hash_loc]):
-            return True
+        record_loc = 0
+        if username_non_auth[record_loc][password_hash_loc] == bcrypt.hashpw(user_info["password"], username_non_auth[record_loc][password_hash_loc]):
+            return (True, "User authenticated")
         else:
-            return False
+            return (False, "Incorrect username or password")
     except:
         return (False, "Unable to establish database connection")
 
@@ -87,37 +66,49 @@ def auth_user(user_info):
 
 def sign_up_user(user_info):
     try:
-        cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
+        cur = database_conn("auth", "auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
         # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
         # Generated with echo "Auth_db_user" | openssl sha1
+
+        # check if the same username or password already exisits
+        cur.execute("SELECT * FROM auth WHERE username={} OR email={};".format(user_info["username"], user_info["email"]))
+        is_already_existing = cur.fetchall()
+        if is_already_existing != []:
+            uname_loc = 1
+            email_loc = 3
+            for elem in is_already_existing:
+                if elem[uname_loc] == user_info["username"]:
+                    return (False, "Username already taken")
+                if elem[email_loc] == user_info["email"]:
+                    return (False, "Email already taken")
+
+        # store the username, salted password and email
         password_salted = bcrypt.hashpw(user_info["password"], bcrypt.gensalt())
-        if ((cur.execute("SELECT * FROM Auth(username) WHERE username={}".format(
-                user_info["username"]) != ""))):  # TODO: i think i need to expad upon the != "" thing
-            return (False, "Username already taken")
-        if ((cur.execute("SELECT * FROM Auth(email) WHERE email = {}".format(
-                user_info["email"]) != ""))):  # TODO: i think i need to expad upon the != "" thing
-            return (False, "Email already taken")
-        cur.execute("INSERT INTO Auth(username) values ({})".format(user_info["username"]))
-        cur.execute("INSERT INTO Auth(password_salted) values ({})".format(password_salted))
-        cur = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+        cur.execute("INSERT INTO auth(username, password_salted, email) values (\'{}\',\'{}\', \'{}\');".format(user_info["username"], password_salted, user_info["email"]))
+
+
+        cur2 = database_conn("User_info", "User_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
         # 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
         # Generated with echo "User_info_db_user" | openssl sha1
-        cur.execute("INSERT INTO User_info(email) values ({})".format(user_info["email"]))
-        cur.execute("INSERT INTO User_info(join_date) values ({})".format(time.strftime("%Y/%m/%d")))
-        return True
+        cur2.execute("INSERT INTO user_info(join_date) values (\'{}\');".format(time.strftime("%Y/%m/%d"))
+        return (True, "User signed up")
     except:
         return (False, "Unable to establish database connection")
 
 
+
 def sign_up_user_details_optinal(user_info):
     try:
-        cur = database_conn("User_info.db", "User_info_db_user", "localhost",
-                            "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+
+        cur = database_conn("user_info", "user_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
         # 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
         # Generated with echo "User_info_db_user" | openssl sha1
+
+        # TODO: Find a better way to do his than O(n)
         for elem in user_info:
-            cur.execute("INSERT INTO User_info({}) values ({})".format(str(elem), str(user_info[elem])))
-        return True
+            cur.execute("INSERT INTO user_info({}) values ({});".format(str(elem), str(user_info[elem])))
+        return (True, "Additional values added")
+
     except:
         return (False, "Unable to establish database connection")
 
@@ -128,20 +119,26 @@ def sign_up_user_details_optinal(user_info):
 
 def get_user_details(user_info):
     try:
-        cur = database_conn("Auth.db", "Auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
+        cur = database_conn("auth", "auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
         # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
         # Generated with echo "Auth_db_user" | openssl sha1
-        cur.execute("SELECT * from Auth WHERE username=\"{}\"".format(User_info["username"]))
+
+        cur.execute("SELECT * from auth WHERE username=\'{}\'".format(user_info["username"]))
+
+        # Get the ID from the inner tuple
         indata = cur.fetchall()
-        userid = indata[0]
-        cur = database_conn("User_info.db", "User_info_db_user", "localhost",
-                            "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+        userid = indata[0][0]
+
+        cur2 = database_conn("user_info", "user_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
         # 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
         # Generated with echo "User_info_db_user" | openssl sha1
-        cur.execute("SELECT * FROM User_info WHERE userid=\"{}\"".format(userid))
+        cur2.execute("SELECT * FROM user_info WHERE id=\'{}\'".format(userid))
+
+        # Strip out the userid
         indata = cur.fetchall()
-        del indata["id"]
-        return indata
+        outdata = indata[0][1:]
+
+        return outdata
     except:
         return (False, "Unable to establish database connection")
 
