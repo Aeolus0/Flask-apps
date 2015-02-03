@@ -114,7 +114,7 @@ def present(username, presentation_name, slide_number=1):
         prev_temp = temp
     content["presentation_name"] = presentation_name
     content["slide_number"] = slide_number
-    content["next_page_link"] = "/presentations/" + str(presentation_name) + "/" + str(slide_number + 1)
+    content["next_page_link"] = str(presentation_name) + "/" + str(slide_number + 1)
     return render_template('presentation.html', content=content, search=search)
 
 @app.route('/<username>/p/list')
