@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, BooleanField, PasswordField
+from wtforms import StringField, BooleanField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 
@@ -17,3 +17,8 @@ class ManageForm(Form):
 
 class IndexForm(Form):
     search = StringField(u'search', default="Search Present.ly")
+
+class MDEditor(Form):
+    page_title = StringField(u'page_title', validators=[DataRequired()], default="Your page title goes here!")
+    slide_type = SelectField(u'slide_type', validators=[DataRequired()], choices=["Title", "Subtitle", "Slide"])
+    slide_content = StringField(u'slide_content', validators=[DataRequired()], default="The content for the slide goes here.")
