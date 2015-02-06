@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    {% for elem in content.result %}
+        <a href="/{{ content.curren_page_username }}/p/{{ elem }}"
+    {% endfor %}
+{% endblock %}
