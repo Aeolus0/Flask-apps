@@ -91,9 +91,9 @@ def root():
     content = dict()
     search = IndexForm()
     if request.method == 'POST':
-        if form.validate_on_submit():
-            content["result"] = actions.search_user_and_pres(form.search.data)
-            return render_template('search.html', content=content, form=form)
+        if search.validate_on_submit():
+            content["result"] = actions.search_user_and_pres(search.search.data)
+            return render_template('search.html', content=content, search=search)
     return render_template('index.html', content=content, search=search)
 
 
