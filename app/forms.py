@@ -20,5 +20,5 @@ class IndexForm(Form):
 
 class MDEditor(Form):
     page_title = StringField(u'page_title', validators=[DataRequired()], default="Your page title goes here!")
-    slide_type = SelectField(u'slide_type', validators=[DataRequired()], choices=["Title", "Subtitle", "Slide"])
+    slide_type = SelectField(u'slide_type', validators=[DataRequired()], choices=[("title", "Title"), ("subtitle", "Subtitle"), ("slide", "Slide")])
     slide_content = StringField(u'slide_content', validators=[DataRequired()], default="The content for the slide goes here.")

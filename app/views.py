@@ -126,6 +126,13 @@ def list_pres(username):
     content["current_page_username"] = str(username)
     return render_template('list.html', content=content, search=search)
 
+@app.route('/<username>/editor')
+def editor(username):
+    content = dict()
+    editorform = MDEditor()
+    content["current_page_username"] = username
+    return render_template('editor.html', content=content, editorform=editorform)
+
 
 @app.route('/<username>')
 def user_page(username):

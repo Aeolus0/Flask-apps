@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Editor</title>
+</head>
+<body>
+    <div id="content_wrapper">
+        <form action="" method="post" name="editor" id="editor">
+            {{ editorform.csrf_token }}
+            <p id="top_half_l">{{ editorform.page_title }}</p>
+            <p id="top_half_r">{{ editorform.slide_type }}</p>
+            <p id="main_pane">{{ editorform.slide_content }}</p>
+        </form>
+    </div>
+</body>
+</html>

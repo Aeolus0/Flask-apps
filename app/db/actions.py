@@ -12,7 +12,7 @@ import psycopg2
 ##########################
 ######    Schema    ######
 ##########################
-#   CREATE TABLE Auth
+#   CREATE TABLE auth
 # 	(id BIGINT PRIMARY KEY NOT NULL,
 #	username              TEXT NOT NULL,
 #	password_salted       TEXT NOT NULL,
@@ -21,11 +21,19 @@ import psycopg2
 
 
 
-#   CREATE TABLE User_info
+#   CREATE TABLE user_info
 #   (id BIGINT PRIMARY KEY NOT NULL,
 #	name                  TEXT,
 #	location              TEXT,
 #	join_date             TEXT
+#   );
+
+#   CREATE TABLE presentations
+#   (id BIGINT PRIMARY KEY NOT NULL,
+#	pres_name                  TEXT,
+#	owned_by              TEXT,
+#	date_created             TEXT,
+#   date_last_modified       TEXT
 #   );
 
 def database_conn(dbname, user, host, password):
@@ -144,5 +152,13 @@ def get_user_details(user_info):
     except:
         return (False, "Unable to establish database connection")
 
+def search_user_and_pres(search_term):
+    cur = database_conn("user_info", "user_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
+    cur.execute("SELECT * FROM user_info where username=\'{}\'".format(str(search_term)))
+    indata = cur.fetchall()
 
+    cur2 = database_conn("presentations", "presentations_db_user", "localhost", "a8279ce3971255805aacd64897ebe0fb1067ee0c")
+    cur2.execute("SELECT * FROM presentations where pres_name=\'{}\'".format(str(search_term)))
+    indata2 = cur2.fetchall
 
+    return {"users": indata, "presentations": indata2}
