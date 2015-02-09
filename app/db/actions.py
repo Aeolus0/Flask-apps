@@ -145,5 +145,4 @@ def get_user_details(user_info):
         return (False, "Unable to establish database connection")
 
 
-# def shared_presentation(pres_uid, account_or_email):
 
