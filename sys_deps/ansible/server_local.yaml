@@ -5,8 +5,9 @@
   	apt: name={{ items }} state=present
   	with_items:
   	  - postgresql-server-dev-9.3 #hooks for psycopg2
-      - libffi-dev #req for cffi which is a req for bcrypt
-      - python-pip
-    	- python-dev #req for bcrypt compilation as <#include Python.h> is in there
-      - build-essential
+	  - postgresql-client-9.3 #psql command line
+          - libffi-dev #req for cffi which is a req for bcrypt
+          - python-pip
+       	  - python-dev #req for bcrypt compilation as <#include Python.h> is in there
+          - build-essential
     

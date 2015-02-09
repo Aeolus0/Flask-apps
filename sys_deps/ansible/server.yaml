@@ -11,6 +11,7 @@
   	with_items:
   	  - postgresql #database server
   	  - postgresql-server-dev-9.3 #hooks for psycopg2
+	  - postgresql-client-9.3 #to get a psql command line
   	  - docker.io #docker for eventual expansion
           - libffi-dev #req for cffi which is a req for bcrypt
     	  - python-dev #req for bcrypt compilation as <#include Python.h> is in there
