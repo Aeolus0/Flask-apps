@@ -3,5 +3,5 @@ make use a executemany() to get user details
 inline comments for base and index.html
 CSS
 Settings page
-make actions func to make search work
+handle search data
 SQL joins for duplicate checking and other stuff where applicable
