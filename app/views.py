@@ -106,7 +106,7 @@ def present(username, presentation_name, slide_number=1):
     search = IndexForm()
     content["presentation_content"] = md_to_html.md_to_html(
         root_dir + "/presentations/" + str(username) + "/" + str(presentation_name) + "/" + str(slide_number) + ".md")
-    for elem in os.listdir("presentations/" + str(username) + "/" + str(presentation_name)):
+    for elem in os.listdir(root_dir + "/presentations/" + str(username) + "/" + str(presentation_name)):
         temp = elem[:-3]
         temp = int(temp)
         if temp > prev_temp:
@@ -117,11 +117,11 @@ def present(username, presentation_name, slide_number=1):
     content["next_page_link"] = str(presentation_name) + "/" + str(slide_number + 1)
     return render_template('presentation.html', content=content, search=search)
 
-@app.route('/<username>/p/list')
+@app.route('/<username>/list')
 def list_pres(username):
     content = dict()
     search = IndexForm()
-    pres_names = os.listdir("presentations/" + str(username))
+    pres_names = os.listdir(root_dir + "/presentations/" + str(username))
     content["presentation_list"] = pres_names
     content["current_page_username"] = str(username)
     return render_template('list.html', content=content, search=search)
@@ -133,7 +133,7 @@ def user_page(username):
     content = dict()
     search = IndexForm()
     content["current_page_username"] = username
-    pres_list = os.listdir("presentations/" + str(username))
+    pres_list = os.listdir(root_dir + "/presentations/" + str(username))
     content["presentation_links"] = pres_list
     is_user_ownpage(username, content)
     return render_template('user_page.html', content=content, user_info=user_info, search=search)
