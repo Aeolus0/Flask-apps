@@ -13,7 +13,7 @@ import psycopg2
 ######    Schema    ######
 ##########################
 #   CREATE TABLE auth
-# 	(id BIGINT PRIMARY KEY NOT NULL,
+# 	(id BIGSERIAL PRIMARY KEY NOT NULL,
 #	username              TEXT NOT NULL,
 #	password_salted       TEXT NOT NULL,
 #	email                 TEXT NOT NULL
@@ -22,14 +22,14 @@ import psycopg2
 
 
 #   CREATE TABLE user_info
-#   (id BIGINT PRIMARY KEY NOT NULL,
+#   (id BIGSERIAL PRIMARY KEY NOT NULL,
 #	name                  TEXT,
 #	location              TEXT,
 #	join_date             TEXT
 #   );
 
 #   CREATE TABLE presentations
-#   (id BIGINT PRIMARY KEY NOT NULL,
+#   (id BIGSERIAL PRIMARY KEY NOT NULL,
 #	pres_name                  TEXT,
 #	owned_by              TEXT,
 #	date_created             TEXT,
@@ -55,7 +55,7 @@ def auth_user(user_info):
         cur = database_conn("auth", "auth_db_user", "localhost", "4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4")
         # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
         # Generated with echo "Auth_db_user" | openssl sha1
-        cur.execute("SELECT * FROM auth WHERE username={};".format(user_info["username"]))
+        cur.execute("SELECT * FROM auth WHERE username='{}';".format(user_info["username"]))
         username_non_auth = cur.fetchall()
         password_hash_loc = 2
         record_loc = 0
@@ -79,7 +79,7 @@ def sign_up_user(user_info):
         # Generated with echo "Auth_db_user" | openssl sha1
 
         # check if the same username or password already exisits
-        cur.execute("SELECT * FROM auth WHERE username={} OR email={};".format(user_info["username"], user_info["email"]))
+        cur.execute("SELECT * FROM auth WHERE username='{}' OR email='{}';".format(user_info["username"], user_info["email"]))
         is_already_existing = cur.fetchall()
         if is_already_existing != []:
             uname_loc = 1
@@ -92,7 +92,7 @@ def sign_up_user(user_info):
 
         # store the username, salted password and email
         password_salted = bcrypt.hashpw(user_info["password"], bcrypt.gensalt())
-        cur.execute("INSERT INTO auth(username, password_salted, email) values (\'{}\',\'{}\',\'{}\');".format(user_info["username"], password_salted, user_info["email"]))
+        cur.execute("INSERT INTO auth(username, password_salted, email) VALUES('{}','{}','{}');".format(str(user_info["username"]), str(password_salted), user_info["email"]))
 
 
         cur2 = database_conn("user_info", "user_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
@@ -100,7 +100,7 @@ def sign_up_user(user_info):
         # Generated with echo "User_info_db_user" | openssl sha1
 
         # Join date for metrics
-        cur2.execute("INSERT INTO user_info(join_date) values (\'{}\');".format(time.strftime("%Y/%m/%d")))
+        cur2.execute("INSERT INTO user_info(join_date) VALUES('{}');".format(time.strftime("%Y/%m/%d")))
         return (True, "User signed up")
     except:
         return (False, "Unable to establish database connection")
@@ -116,7 +116,7 @@ def sign_up_user_details_optinal(user_info):
 
         # TODO: Find a better way to do his than O(n)
         for elem in user_info:
-            cur.execute("INSERT INTO user_info({}) values ({});".format(str(elem), str(user_info[elem])))
+            cur.execute("INSERT INTO user_info({}) VALUES('{}');".format(str(elem), str(user_info[elem])))
         return (True, "Additional values added")
 
     except:
@@ -133,7 +133,7 @@ def get_user_details(user_info):
         # 4a9ae88667d0efcb4d596c5516b3fe3bf5a22ab4 is the SHA1 of "Auth_db_user"
         # Generated with echo "Auth_db_user" | openssl sha1
 
-        cur.execute("SELECT * from auth WHERE username=\'{}\'".format(user_info["username"]))
+        cur.execute("SELECT * from auth WHERE username='{}';".format(str(user_info["username"]))
 
         # Get the ID from the inner tuple
         indata = cur.fetchall()
@@ -142,7 +142,7 @@ def get_user_details(user_info):
         cur2 = database_conn("user_info", "user_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
         # 8487997120e51bb4a83a5b4883f2b7daf80ac14a is the SHA1 of "User_info_db_user"
         # Generated with echo "User_info_db_user" | openssl sha1
-        cur2.execute("SELECT * FROM user_info WHERE id=\'{}\'".format(userid))
+        cur2.execute("SELECT * FROM user_info WHERE id='{};'".format(str(userid))
 
         # Strip out the userid
         indata = cur.fetchall()
@@ -154,11 +154,11 @@ def get_user_details(user_info):
 
 def search_user_and_pres(search_term):
     cur = database_conn("user_info", "user_info_db_user", "localhost", "8487997120e51bb4a83a5b4883f2b7daf80ac14a")
-    cur.execute("SELECT * FROM user_info where username=\'{}\'".format(str(search_term)))
+    cur.execute("SELECT * FROM user_info where username='{}';".format(str(search_term)))
     indata = cur.fetchall()
 
     cur2 = database_conn("presentations", "presentations_db_user", "localhost", "a8279ce3971255805aacd64897ebe0fb1067ee0c")
-    cur2.execute("SELECT * FROM presentations where pres_name=\'{}\'".format(str(search_term)))
+    cur2.execute("SELECT * FROM presentations where pres_name='{}';".format(str(search_term)))
     indata2 = cur2.fetchall
 
     return {"users": indata, "presentations": indata2}
