@@ -1,4 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Hello</h1>
+    <div id="signup">
+        <form action="" method="post" name="signup" id="signup">
+            {{ form.csrf_token }}
+            <p id="username">{{ form.username }}</p>
+            <p id="email">{{ form.email }}</p>
+            <p id="password">{{ form.password }}</p>
+            <p id="password2">{{ form.repeat_password }}</p>
+            <p id="rememberme">{{ form.rememberme }}</p>
+            <input type="submit" value="Submit">
+        </form>
+    <h1>{{ content.error }}</h1>
+    </div>
 {% endblock %}
