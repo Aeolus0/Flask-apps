@@ -70,16 +70,17 @@ def logout():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     content = dict()
-    form = LoginForm()
+    form = SignupForm()
     search = IndexForm()
     if request.method == 'POST':
         user_info = dict()
         if form.validate_on_submit():
-            user_info["username"] = form.userid.data
+            user_info["username"] = form.username.data
             user_info["password"] = form.password.data
             user_info["email"] = form.email.data
             if not actions.sign_up_user(user_info)[0]:
-                content["error"] = data[1]
+                content["error"] = actions.sign_up_user(user_info)[1]
+                return render_template('signup.html', content=content, form=form, search=search)
             else:
                 return redirect('/' + user_info["username"])
     return render_template('signup.html', content=content, form=form, search=search)
@@ -129,9 +130,9 @@ def list_pres(username):
 @app.route('/<username>/editor')
 def editor(username):
     content = dict()
-    editorform = MDEditor()
+    form = MDEditor()
     content["current_page_username"] = username
-    return render_template('editor.html', content=content, editorform=editorform)
+    return render_template('editor.html', content=content, form=form)
 
 
 @app.route('/<username>')
